@@ -115,7 +115,7 @@ class AppointmentsController extends GetxController {
           'time': '10:30 صباحاً',
           'date': 'الخميس، 7 مايو',
           'status': 'completed',
-          'statusText': 'قام',
+          'statusText': 'قائم',
         },
         {
           'type': 'clinic',
@@ -126,7 +126,7 @@ class AppointmentsController extends GetxController {
           'time': '2:00 مساءً',
           'date': 'الخميس، 7 مايو',
           'status': 'completed',
-          'statusText': 'قام',
+          'statusText': 'قائم',
         },
         {
           'type': 'government',

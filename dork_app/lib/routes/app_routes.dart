@@ -9,6 +9,7 @@ class AppRoutes {
   static const PROVIDER_DETAILS = '/provider-details';
   static const SERVICE_BOOKING = '/service-booking';
   static const PROFILE = '/profile';
+  static const SEARCH = '/search';
   static const String TICKET = '/ticket';
-  static const String APPOINTMENTS = '/appointments';  
+  static const String APPOINTMENTS = '/appointments';
 }

@@ -97,170 +97,204 @@
 //   }
 // }
 
-// lib/views/ticket/ticket_view.dart
-
-import 'package:dork_app/core/constants/color_manager.dart';
-import 'package:dork_app/core/theme/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../core/constants/color_manager.dart';
+import '../../core/theme/text_style.dart';
 import 'controller/ticket_controller.dart';
-import 'widgets/ticket_info_widget.dart';
-import 'widgets/ticket_buttons_widget.dart';
-import '../home/controller/home_controller.dart';
 
 class TicketView extends StatelessWidget {
-  // ✅ StatelessWidget بدل GetView
   const TicketView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // ✅ جلب الـ Controller
     final TicketController controller = Get.find<TicketController>();
-    final HomeController homeController = Get.find<HomeController>();
 
     return Scaffold(
       backgroundColor: ColorManager.background,
+      appBar: AppBar(
+        backgroundColor: ColorManager.white, // ✅ نفس مواعيدي (أبيض)
+        elevation: 0,
+        title: Text(
+          'تذكرتي',
+          style: TextStyles.headLine.copyWith(
+            fontSize: 20,
+            color: ColorManager.primary, // ✅ نفس مواعيدي (أزرق غامق)
+          ),
+        ),
+        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: ColorManager.primary,
+          ), // ✅ نفس مواعيدي
+          onPressed: () => Get.offAllNamed('/home'),
+        ),
+        actions: [
+          // IconButton(
+          //   icon: Icon(Icons.search, color: ColorManager.primary),
+          //   onPressed: () {},
+          // ),
+        ],
+      ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(color: ColorManager.primary),
           );
         }
 
-        return Column(
-          children: [
-            _buildHeader(),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // العنوان
+              Text('حجزك النشط', style: TextStyles.headLine),
+              const SizedBox(height: 20),
+
+              // ✅ بطاقة التذكرة
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: ColorManager.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: ColorManager.shadow,
+                      spreadRadius: 1,
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('حجزك النشط', style: TextStyles.headLine),
-                    const SizedBox(height: 20),
-                    TicketInfoWidget(),
-                    const Spacer(),
-                    TicketButtonsWidget(),
-                    const SizedBox(height: 20),
+                    _buildInfoRow('رقم تذكرتك', controller.ticketNumber.value),
+                    const Divider(color: ColorManager.grey),
+                    _buildInfoRow('الدور الحالي', controller.currentTurn.value),
+                    const Divider(color: ColorManager.grey),
+                    _buildInfoRow(
+                      '${controller.peopleAhead.value} أشخاص أمامك',
+                      '',
+                      isHighlight: true,
+                    ),
+                    const Divider(color: ColorManager.grey),
+                    _buildInfoRow(
+                      'الوقت المقدر للانتظار: ${controller.waitTime.value} دقيقة',
+                      '',
+                      isHighlight: true,
+                    ),
                   ],
                 ),
               ),
-            ),
-            _buildBottomNavigation(homeController),
-          ],
+
+              const SizedBox(height: 30),
+
+              // ✅ الأزرار (نفس مواعيدي)
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: controller.postponeTicket,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: ColorManager.accent.withOpacity(0.15),
+                        foregroundColor: ColorManager.accent,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: Text(
+                        'تأجيل',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: ColorManager.accent,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: controller.cancelTicket,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: ColorManager.error.withOpacity(0.15),
+                        foregroundColor: ColorManager.error,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: Text(
+                        'إلغاء',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: ColorManager.error,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 12),
+
+              // ✅ زر حجز جديد
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: controller.bookNewTicket,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: ColorManager.accent,
+                    foregroundColor: ColorManager.white,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Text(
+                    'حجز جديد',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 20),
+            ],
+          ),
         );
       }),
     );
   }
 
-  Widget _buildHeader() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [ColorManager.primary, ColorManager.primary.withOpacity(0.8)],
-        ),
-        borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(30),
-          bottomRight: Radius.circular(30),
-        ),
-      ),
+  Widget _buildInfoRow(String label, String value, {bool isHighlight = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          IconButton(
-            onPressed: () => Get.back(),
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
-          ),
-          const SizedBox(width: 4),
-          Expanded(
-            child: Text(
-              'مرحباً بك',
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          const Icon(Icons.notifications_outlined, color: Colors.white),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBottomNavigation(HomeController homeController) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      decoration: BoxDecoration(
-        color: ColorManager.white,
-        border: Border(
-          top: BorderSide(color: ColorManager.grey.withOpacity(0.2)),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: ColorManager.shadow,
-            blurRadius: 4,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavItem(
-            icon: Icons.home,
-            label: 'الرئيسية',
-            isSelected: false,
-            onTap: () => homeController.goToHome(),
-          ),
-          _buildNavItem(
-            icon: Icons.event,
-            label: 'المواعيد',
-            isSelected: false,
-            onTap: () => homeController.goToAppointments(),
-          ),
-          _buildNavItem(
-            icon: Icons.confirmation_number,
-            label: 'تذكرتي',
-            isSelected: true,
-            onTap: () {}, // أنت هنا
-          ),
-          _buildNavItem(
-            icon: Icons.person,
-            label: 'الملف',
-            isSelected: false,
-            onTap: () => homeController.goToProfile(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNavItem({
-    required IconData icon,
-    required String label,
-    required bool isSelected,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            color: isSelected ? ColorManager.accent : ColorManager.grey,
-            size: 28,
-          ),
-          const SizedBox(height: 4),
           Text(
             label,
             style: TextStyle(
-              color: isSelected ? ColorManager.accent : ColorManager.grey,
-              fontSize: 12,
-              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              fontSize: 16,
+              color: isHighlight ? ColorManager.primary : ColorManager.grey,
+              fontWeight: isHighlight ? FontWeight.bold : FontWeight.normal,
             ),
           ),
+          if (value.isNotEmpty)
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: isHighlight ? ColorManager.accent : ColorManager.primary,
+              ),
+            ),
         ],
       ),
     );

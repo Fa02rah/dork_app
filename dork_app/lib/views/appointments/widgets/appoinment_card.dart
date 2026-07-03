@@ -1,13 +1,13 @@
-import 'package:dork_app/core/constants/color_manager.dart';
-import 'package:dork_app/core/theme/text_style.dart';
-import 'package:dork_app/views/appointments/controller/appointments_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../core/constants/color_manager.dart';
+import '../../../core/theme/text_style.dart';
+import '../controller/appointments_controller.dart';
 
-class AppointmentCard extends GetView<AppointmentsController> {
+class AppoinmentCard extends GetView<AppointmentsController> {
   final Map<String, dynamic> appointment;
 
-  const AppointmentCard({super.key, required this.appointment});
+  const AppoinmentCard({super.key, required this.appointment});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class AppointmentCard extends GetView<AppointmentsController> {
     final isCompleted = appointment['status'] == 'completed';
 
     return Container(
-      margin: EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: ColorManager.white,
         borderRadius: BorderRadius.circular(16),
@@ -25,7 +25,7 @@ class AppointmentCard extends GetView<AppointmentsController> {
             color: ColorManager.shadow,
             spreadRadius: 1,
             blurRadius: 10,
-            offset: Offset(0, 4),
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -34,17 +34,18 @@ class AppointmentCard extends GetView<AppointmentsController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // النوع والاسم والحالة
             Row(
               children: [
                 Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: color.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(icon, color: color, size: 24),
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,10 +76,13 @@ class AppointmentCard extends GetView<AppointmentsController> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
-                    color: isCompleted 
-                        ? Colors.green.withOpacity(0.15) 
+                    color: isCompleted
+                        ? Colors.green.withOpacity(0.15)
                         : ColorManager.accent.withOpacity(0.15),
                     borderRadius: BorderRadius.circular(20),
                   ),
@@ -93,9 +97,10 @@ class AppointmentCard extends GetView<AppointmentsController> {
                 ),
               ],
             ),
-            SizedBox(height: 12),
-            Divider(color: ColorManager.grey.withOpacity(0.2)),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
+            const Divider(color: ColorManager.grey),
+            const SizedBox(height: 12),
+            // تفاصيل التذكرة
             Row(
               children: [
                 Expanded(
@@ -110,7 +115,7 @@ class AppointmentCard extends GetView<AppointmentsController> {
                           color: ColorManager.primary,
                         ),
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
                         'الوقت: ${appointment['time']}',
                         style: TextStyle(
@@ -123,10 +128,7 @@ class AppointmentCard extends GetView<AppointmentsController> {
                 ),
                 Text(
                   appointment['date'],
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: ColorManager.grey,
-                  ),
+                  style: TextStyle(fontSize: 13, color: ColorManager.grey),
                 ),
               ],
             ),

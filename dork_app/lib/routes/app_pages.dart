@@ -1,5 +1,8 @@
+import 'package:dork_app/views/appointments/appointment_view.dart';
 import 'package:dork_app/views/appointments/controller/appointments_controller.dart';
 import 'package:dork_app/views/home/appointments_view.dart';
+import 'package:dork_app/views/home/search/controller/search_controller.dart';
+import 'package:dork_app/views/home/search/search_view.dart';
 import 'package:dork_app/views/ticket/controller/ticket_controller.dart';
 import 'package:dork_app/views/ticket/ticket_view.dart';
 import 'package:get/get.dart';
@@ -39,17 +42,16 @@ class AppPages {
       page: () => const SignupView(),
       binding: SignupBinding(),
     ),
-    GetPage(
-      name: AppRoutes.HOME,
-      page: () => const HomeView(),
-    ),
+    GetPage(name: AppRoutes.HOME, page: () => const HomeView()),
 
     // صفحة تفاصيل الصنف (مثل قائمة البنوك)
     GetPage(
       name: AppRoutes.CATEGORY_DETAILS,
       page: () => const CategoryDetailsView(),
       binding: BindingsBuilder(() {
-        Get.lazyPut<CategoryDetailsController>(() => CategoryDetailsController());
+        Get.lazyPut<CategoryDetailsController>(
+          () => CategoryDetailsController(),
+        );
       }),
       transition: Transition.cupertino,
     ),
@@ -59,7 +61,9 @@ class AppPages {
       name: AppRoutes.PROVIDER_DETAILS,
       page: () => const ProviderDetailsView(),
       binding: BindingsBuilder(() {
-        Get.lazyPut<ProviderDetailsController>(() => ProviderDetailsController());
+        Get.lazyPut<ProviderDetailsController>(
+          () => ProviderDetailsController(),
+        );
       }),
       transition: Transition.cupertino,
     ),
@@ -74,7 +78,8 @@ class AppPages {
       transition: Transition.rightToLeftWithFade,
     ),
     GetPage(
-      name: AppRoutes.PROFILE, // أو AppRoutes.PROFILE حسب ما اعتمدتيه في ملف AppRoutes
+      name: AppRoutes
+          .PROFILE, // أو AppRoutes.PROFILE حسب ما اعتمدتيه في ملف AppRoutes
       page: () => const ProfileView(),
       binding: BindingsBuilder(() {
         // حقن الكنترولر بطريقة ذكية؛ ليتم إنشاؤه فقط عند دخول الصفحة وحذفه عند الخروج لتوفير الذاكرة
@@ -82,7 +87,15 @@ class AppPages {
       }),
       transition: Transition.cupertino, // حركة انتقال ناعمة متوافقة مع الـ iOS
     ),
-    
+    GetPage(
+      name: AppRoutes.SEARCH, // تأكدي أن هذا المسار معرف في AppRoutes
+      page: () => const SearchView(),
+      binding: BindingsBuilder(() {
+        // حقن الكنترولر الخاص بالبحث
+        Get.lazyPut<AppSearchController>(() => AppSearchController());
+      }),
+      transition: Transition.fadeIn, // حركة انتقال مناسبة للبحث
+    ), // <-
     GetPage(
       name: AppRoutes.TICKET,
       page: () => const TicketView(),
@@ -93,10 +106,11 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.APPOINTMENTS,
-      page: () => const AppointmentsView(),
+      page: () => const AppointmentView(),
       binding: BindingsBuilder(() {
         Get.lazyPut<AppointmentsController>(() => AppointmentsController());
       }),
-      transition: Transition.cupertino,),// <--- إغلاق الـ GetPage
+      transition: Transition.cupertino,
+    ), // <--- إغلاق الـ GetPage
   ]; // <--- إغلاق قائمة الـ pages
 } // <--- إغلاق كلاس AppPages

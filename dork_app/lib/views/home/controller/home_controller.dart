@@ -91,6 +91,7 @@
 
 // lib/views/home/controller/home_controller.dart
 
+import 'package:dork_app/views/appointments/appointment_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../appointments_view.dart';
@@ -132,8 +133,9 @@ class HomeController extends GetxController {
     // ✅ تهيئة الصفحات بعد تسجيل الـ Controllers
     pages = [
       const MainHomeView(), // 0: الرئيسية
-      const AppointmentsView(), // 1: المواعيد
-      const TicketView(), // 2: تذكرتي
+      const AppointmentView(), // 1: المواعيد
+      const TicketView(),
+      const Center(child: Text("صفحة الاشعارات")), // 2: تذكرتي
       const ProfileView(), // 3: الملف
     ];
 

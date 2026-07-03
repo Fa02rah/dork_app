@@ -138,6 +138,10 @@ class CustomBottomNav extends StatelessWidget {
               icon: Icon(Icons.confirmation_number), // ✅ أيقونة التذكرة
               label: 'تذكرتي', // ✅ بدل الإشعارات
             ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.notifications),
+              label: 'الإشعارات',
+            ),
             BottomNavigationBarItem(icon: Icon(Icons.person), label: 'الملف'),
           ],
         ),
