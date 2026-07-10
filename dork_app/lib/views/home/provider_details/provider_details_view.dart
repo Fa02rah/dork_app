@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:dork_app/views/home/provider_details/widgets/rating_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,15 @@ import 'widgets/service_card.dart';
 
 class ProviderDetailsView extends GetView<ProviderDetailsController> {
   const ProviderDetailsView({super.key});
+  void _showRatingDialog(BuildContext context) {
+    Get.dialog(
+      RatingDialog(
+        onRatingSubmitted: (rating) {
+          controller.submitRating(rating); // نرسل القيمة للكنترولر
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +58,15 @@ class ProviderDetailsView extends GetView<ProviderDetailsController> {
           ),
         ),
         centerTitle: true,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              icon: const Icon(Icons.star_border_rounded, color: ColorManager.amber, size: 35),
+              onPressed: () => _showRatingDialog(context),
+            ),
+          ),
+        ],
       ),
       body: BookingBackground(
         child: Obx(() {

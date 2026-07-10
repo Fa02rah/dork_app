@@ -134,10 +134,10 @@ class CustomBottomNav extends StatelessWidget {
               icon: Icon(Icons.calendar_month),
               label: 'المواعيد',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.confirmation_number), // ✅ أيقونة التذكرة
-              label: 'تذكرتي', // ✅ بدل الإشعارات
-            ),
+            // BottomNavigationBarItem(
+            //   icon: Icon(Icons.confirmation_number), // ✅ أيقونة التذكرة
+            //   label: 'تذكرتي', // ✅ بدل الإشعارات
+            // ),
             BottomNavigationBarItem(
               icon: Icon(Icons.notifications),
               label: 'الإشعارات',

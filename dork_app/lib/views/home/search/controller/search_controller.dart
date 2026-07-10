@@ -1,60 +1,70 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../models/search_item_model.dart';
+import '../../../../core/constants/image_assets.dart';
+import '../../../../models/service_model.dart'; // استيراد الموديل الموحد
 import '../../../../routes/app_routes.dart';
 
 class AppSearchController extends GetxController {
   final TextEditingController searchTextController = TextEditingController();
 
-  // القائمة الأساسية لكل العناصر
-  var allItems = <SearchItem>[].obs;
-  // القائمة المفلترة التي ستظهر في الواجهة
-  var filteredItems = <SearchItem>[].obs;
+  // القائمة الآن تعتمد على ServiceModel مباشرة
+  var allServices = <ServiceModel>[].obs;
+  var filteredItems = <ServiceModel>[].obs;
 
   @override
   void onInit() {
     super.onInit();
-    // استدعاء دالة جلب البيانات عند بدء الكنترولر
-    loadSearchData();
+    prepareServices();
   }
 
-  // 1. دالة جلب البيانات من قاعدة البيانات أو الـ API
-  Future<void> loadSearchData() async {
-    try {
-      // ضعي هنا كود جلب البيانات من الـ Service الخاص بكِ
-      // List<SearchItem> data = await MySearchService.fetchAllItems();
-
-      // بمجرد جلب البيانات، قومي بتعبئتها في القائمة الأساسية
-      // allItems.assignAll(data);
-
-    } catch (e) {
-      Get.snackbar("خطأ", "فشل تحميل بيانات البحث");
-    }
+  void prepareServices() {
+    // تعبئة البيانات باستخدام ServiceModel
+    allServices.assignAll([
+      ServiceModel(id: 1,
+          title: "فتح حساب جديد",
+          description: "حسابات توفير وجارية",
+          image: ImageAssets.bank,
+          providerId: 101),
+      ServiceModel(id: 2,
+          title: "بطاقة دفع",
+          description: "استخراج بطاقات فيزا وماستر",
+          image: ImageAssets.bank, providerId: 101),
+      ServiceModel(id: 3, title: "استشارة مالية",
+          description: "استشارة للأفراد والشركات",
+          image: ImageAssets.bank, providerId: 101),
+      ServiceModel(id: 4,
+          title: "كشف طبي",
+          description: "حجز موعد لدى طبيب مختص",
+          image: ImageAssets.clinic, providerId: 201),
+    ]);
   }
 
-  // 2. دالة البحث التي تعمل عند الكتابة في مربع البحث[cite: 3]
   void search(String query) {
     if (query.isEmpty) {
       filteredItems.clear();
       return;
     }
-    // البحث داخل القائمة الأساسية وتحديث النتائج
-    filteredItems.value = allItems.where((item) =>
-        item.title.toLowerCase().contains(query.toLowerCase())).toList();
+
+    // البحث في الخدمات
+    filteredItems.value = allServices.where((item) =>
+    item.title.toLowerCase().contains(query.toLowerCase()) ||
+        item.description.toLowerCase().contains(query.toLowerCase())
+    ).toList();
   }
 
-  // 3. دالة التنقل عند الضغط على نتيجة بحث
-  void onResultTap(SearchItem item) {
-    if (item.type == 'category') {
-      Get.toNamed(AppRoutes.CATEGORY_DETAILS, arguments: {'categoryId': item.id});
-    } else if (item.type == 'provider') {
-      Get.toNamed(AppRoutes.PROVIDER_DETAILS, arguments: {'providerId': item.id});
-    }
+  // دالة الانتقال لصفحة الحجز
+  void onResultTap(ServiceModel service) {
+    // الانتقال مع تمرير كامل البيانات التي يحتاجها ServiceBookingController
+    Get.toNamed(AppRoutes.SERVICE_BOOKING, arguments: {
+      'service': service, // الكائن كاملاً
+      'providerName': "الخدمة المطلوبة", // يمكنك هنا تحديد اسم المزود بناءً على الـ providerId إذا أردتِ
+      'providerLogo': service.image,      // تمرير اللوجو مباشرة
+      'branchName': "الفرع الرئيسي",
+    });
   }
 
   @override
   void onClose() {
-    // تنظيف الذاكرة عند إغلاق الصفحة[cite: 3]
     searchTextController.dispose();
     super.onClose();
   }

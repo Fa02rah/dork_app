@@ -92,14 +92,13 @@
 // lib/views/home/controller/home_controller.dart
 
 import 'package:dork_app/views/appointments/appointment_view.dart';
+import 'package:dork_app/views/notification/notification_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../appointments_view.dart';
 import '../main_home_view.dart';
 import '../../../models/category_model.dart';
 import '../../../core/constants/image_assets.dart';
 import '../profile/profile_view.dart';
-import '../../ticket/ticket_view.dart';
 import '../../ticket/controller/ticket_controller.dart'; // ✅ استيراد TicketController
 import '../../appointments/controller/appointments_controller.dart'; // ✅ استيراد AppointmentsController
 
@@ -110,7 +109,7 @@ class HomeController extends GetxController {
   var foundCategories = <CategoryModel>[].obs;
   var isLoading = true.obs;
   var currentPage = 0.obs;
-  var topRatedServices = <CategoryModel>[].obs;
+  var topRatedInstituation = <CategoryModel>[].obs;
 
   // ✅ تسجيل الـ Controllers هنا
   late final TicketController ticketController;
@@ -134,8 +133,8 @@ class HomeController extends GetxController {
     pages = [
       const MainHomeView(), // 0: الرئيسية
       const AppointmentView(), // 1: المواعيد
-      const TicketView(),
-      const Center(child: Text("صفحة الاشعارات")), // 2: تذكرتي
+      // const TicketView(),
+      const NotificationListScreen(),
       const ProfileView(), // 3: الملف
     ];
 
@@ -240,7 +239,7 @@ class HomeController extends GetxController {
         categoryKey: 'banks',
       ),
     ];
-    topRatedServices.assignAll(topRatedResponse);
+    topRatedInstituation.assignAll(topRatedResponse);
   }
 
   void changePage(int index) {

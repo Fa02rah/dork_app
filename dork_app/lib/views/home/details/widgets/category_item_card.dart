@@ -7,6 +7,7 @@ class CategoryItemCard extends StatelessWidget {
   final String subtitle;
   final String imagePath;
   final VoidCallback onTap;
+  final double rating;
 
   const CategoryItemCard({
     super.key,
@@ -14,6 +15,7 @@ class CategoryItemCard extends StatelessWidget {
     required this.subtitle,
     required this.imagePath,
     required this.onTap,
+    required this.rating, // 👈 أضيفيه هنا أيضاً
   });
 
   @override
@@ -105,6 +107,25 @@ class CategoryItemCard extends StatelessWidget {
                               fontWeight: FontWeight.w400,
                               color: ColorManager.grey,
                             ),
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.star_rounded, // أيقونة نجمة واحدة
+                                color: ColorManager.accent,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 4), // مسافة صغيرة جداً
+                              Text(
+                                rating.toString(), // الرقم (مثلاً 4.5)
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: ColorManager.textDark,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),

@@ -1,159 +1,54 @@
-// import 'package:dork_app/core/constants/color_manager.dart';
-// import 'package:dork_app/core/theme/text_style.dart';
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-// import 'controller/ticket_controller.dart';
-// import 'widgets/ticket_info_widget.dart';
-// import 'widgets/ticket_buttons_widget.dart';
-// import 'widgets/bottom_nav_ticket.dart';
-
-// class TicketView extends GetView<TicketController> {
-//   const TicketView({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: ColorManager.background,
-//       body: Obx(() {
-//         if (controller.isLoading.value) {
-//           return Center(
-//             child: CircularProgressIndicator(
-//               color: ColorManager.primary,
-//             ),
-//           );
-//         }
-
-//         return Column(
-//           children: [
-//             _buildHeader(),
-//             Expanded(
-//               child: Padding(
-//                 padding: const EdgeInsets.all(20.0),
-//                 child: Column(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     Text(
-//                       'حجزك النشط',
-//                       style: TextStyles.headLine,
-//                     ),
-//                     SizedBox(height: 20),
-//                     TicketInfoWidget(),
-//                     Spacer(),
-//                     TicketButtonsWidget(),
-//                     SizedBox(height: 20),
-//                   ],
-//                 ),
-//               ),
-//             ),
-//             BottomNavTicket(),
-//           ],
-//         );
-//       }),
-//     );
-//   }
-
-//   Widget _buildHeader() {
-//     return Container(
-//       padding: EdgeInsets.all(20),
-//       decoration: BoxDecoration(
-//         gradient: LinearGradient(
-//           colors: [
-//             ColorManager.primary,
-//             ColorManager.primary.withOpacity(0.8),
-//           ],
-//         ),
-//         borderRadius: BorderRadius.only(
-//           bottomLeft: Radius.circular(30),
-//           bottomRight: Radius.circular(30),
-//         ),
-//       ),
-//       child: Row(
-//         children: [
-//           CircleAvatar(
-//             backgroundColor: ColorManager.white,
-//             child: Icon(
-//               Icons.person,
-//               color: ColorManager.primary,
-//             ),
-//           ),
-//           SizedBox(width: 12),
-//           Expanded(
-//             child: Text(
-//               'مرحباً بك',
-//               style: TextStyle(
-//                 color: ColorManager.white,
-//                 fontSize: 18,
-//                 fontWeight: FontWeight.bold,
-//               ),
-//             ),
-//           ),
-//           Icon(
-//             Icons.notifications_outlined,
-//             color: ColorManager.white,
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/constants/color_manager.dart';
 import '../../core/theme/text_style.dart';
-import 'controller/ticket_controller.dart';
+import '../../views/home/details/widgets/booking_background.dart';
 
 class TicketView extends StatelessWidget {
-  const TicketView({super.key});
+  final Map<String, dynamic>? appointmentData;
+
+  const TicketView({super.key, this.appointmentData});
 
   @override
   Widget build(BuildContext context) {
-    final TicketController controller = Get.find<TicketController>();
+    final ticketNumber = appointmentData?['ticket'] ?? 'A-14';
+    final currentTurn = 'A-${int.parse(ticketNumber.split('-')[1]) - 2}';
+    final peopleAhead = 2;
+    final waitTime = 15;
 
     return Scaffold(
       backgroundColor: ColorManager.background,
       appBar: AppBar(
-        backgroundColor: ColorManager.white, // ✅ نفس مواعيدي (أبيض)
-        elevation: 0,
+        backgroundColor: ColorManager.gradientStart, // ✅ شفاف
+        elevation: 0, // ✅ بدون ظل
+        leading: IconButton(
+          onPressed: () => Get.back(),
+          icon: Icon(Icons.arrow_back, color: ColorManager.primary, size: 28),
+        ),
         title: Text(
-          'تذكرتي',
+          'تفاصيل الحجز',
           style: TextStyles.headLine.copyWith(
             fontSize: 20,
-            color: ColorManager.primary, // ✅ نفس مواعيدي (أزرق غامق)
+            color: ColorManager.primary,
           ),
         ),
         centerTitle: true,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: ColorManager.primary,
-          ), // ✅ نفس مواعيدي
-          onPressed: () => Get.offAllNamed('/home'),
-        ),
-        actions: [
-          // IconButton(
-          //   icon: Icon(Icons.search, color: ColorManager.primary),
-          //   onPressed: () {},
-          // ),
-        ],
+        // ✅ إذا بدك أزرار إضافية
+        // actions: [
+        //   IconButton(
+        //     onPressed: () {},
+        //     icon: Icon(Icons.search, color: ColorManager.primary),
+        //   ),
+        // ],
       ),
-      body: Obx(() {
-        if (controller.isLoading.value) {
-          return const Center(
-            child: CircularProgressIndicator(color: ColorManager.primary),
-          );
-        }
-
-        return SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+      body: BookingBackground(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // العنوان
               Text('حجزك النشط', style: TextStyles.headLine),
               const SizedBox(height: 20),
-
-              // ✅ بطاقة التذكرة
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
@@ -161,57 +56,64 @@ class TicketView extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: ColorManager.shadow,
+                      color: ColorManager.cardShadowColor,
                       spreadRadius: 1,
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
                   ],
+                  border: Border.all(color: ColorManager.borderLight),
                 ),
                 child: Column(
                   children: [
-                    _buildInfoRow('رقم تذكرتك', controller.ticketNumber.value),
+                    _buildInfoRow('رقم تذكرتك', ticketNumber),
                     const Divider(color: ColorManager.grey),
-                    _buildInfoRow('الدور الحالي', controller.currentTurn.value),
+                    _buildInfoRow('الدور الحالي', currentTurn),
                     const Divider(color: ColorManager.grey),
                     _buildInfoRow(
-                      '${controller.peopleAhead.value} أشخاص أمامك',
+                      '$peopleAhead أشخاص أمامك',
                       '',
                       isHighlight: true,
                     ),
                     const Divider(color: ColorManager.grey),
                     _buildInfoRow(
-                      'الوقت المقدر للانتظار: ${controller.waitTime.value} دقيقة',
+                      'الوقت المقدر للانتظار: $waitTime دقيقة',
                       '',
                       isHighlight: true,
                     ),
                   ],
                 ),
               ),
-
               const SizedBox(height: 30),
-
-              // ✅ الأزرار (نفس مواعيدي)
               Row(
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: controller.postponeTicket,
+                      onPressed: () {
+                        Get.snackbar(
+                          'تم التأجيل',
+                          'تم تأجيل حجزك بنجاح',
+                          snackPosition: SnackPosition.BOTTOM,
+                          backgroundColor: ColorManager.waitCardBorder,
+                          colorText: ColorManager.white,
+                          duration: const Duration(seconds: 3),
+                          margin: const EdgeInsets.all(10),
+                          borderRadius: 12,
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: ColorManager.accent.withOpacity(0.15),
-                        foregroundColor: ColorManager.accent,
+                        backgroundColor: ColorManager.waitCardBorder,
+                        foregroundColor: ColorManager.white,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        elevation: 0,
                       ),
-                      child: Text(
+                      child: const Text(
                         'تأجيل',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: ColorManager.accent,
                         ),
                       ),
                     ),
@@ -219,36 +121,47 @@ class TicketView extends StatelessWidget {
                   const SizedBox(width: 12),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: controller.cancelTicket,
+                      onPressed: () {
+                        Get.snackbar(
+                          'تم الإلغاء',
+                          'تم إلغاء حجزك بنجاح',
+                          snackPosition: SnackPosition.BOTTOM,
+                          backgroundColor: ColorManager.error,
+                          colorText: ColorManager.white,
+                          duration: const Duration(seconds: 3),
+                          margin: const EdgeInsets.all(10),
+                          borderRadius: 12,
+                        );
+                        Future.delayed(const Duration(seconds: 1), () {
+                          Get.back();
+                        });
+                      },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: ColorManager.error.withOpacity(0.15),
-                        foregroundColor: ColorManager.error,
+                        backgroundColor: ColorManager.error,
+                        foregroundColor: ColorManager.white,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        elevation: 0,
                       ),
-                      child: Text(
+                      child: const Text(
                         'إلغاء',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: ColorManager.error,
                         ),
                       ),
                     ),
                   ),
                 ],
               ),
-
               const SizedBox(height: 12),
-
-              // ✅ زر حجز جديد
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: controller.bookNewTicket,
+                  onPressed: () {
+                    Get.toNamed('/service-booking');
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: ColorManager.accent,
                     foregroundColor: ColorManager.white,
@@ -263,12 +176,10 @@ class TicketView extends StatelessWidget {
                   ),
                 ),
               ),
-
-              const SizedBox(height: 20),
             ],
           ),
-        );
-      }),
+        ),
+      ),
     );
   }
 
@@ -282,7 +193,7 @@ class TicketView extends StatelessWidget {
             label,
             style: TextStyle(
               fontSize: 16,
-              color: isHighlight ? ColorManager.primary : ColorManager.grey,
+              color: isHighlight ? ColorManager.primary : ColorManager.textGrey,
               fontWeight: isHighlight ? FontWeight.bold : FontWeight.normal,
             ),
           ),

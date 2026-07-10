@@ -3,6 +3,8 @@ import 'package:dork_app/views/appointments/controller/appointments_controller.d
 import 'package:dork_app/views/home/appointments_view.dart';
 import 'package:dork_app/views/home/search/controller/search_controller.dart';
 import 'package:dork_app/views/home/search/search_view.dart';
+import 'package:dork_app/views/notification/notification_details_screen.dart';
+import 'package:dork_app/views/notification/notification_list_screen.dart';
 import 'package:dork_app/views/ticket/controller/ticket_controller.dart';
 import 'package:dork_app/views/ticket/ticket_view.dart';
 import 'package:get/get.dart';
@@ -86,6 +88,20 @@ class AppPages {
         Get.lazyPut<ProfileController>(() => ProfileController());
       }),
       transition: Transition.cupertino, // حركة انتقال ناعمة متوافقة مع الـ iOS
+    ),
+    GetPage(
+      name: AppRoutes
+          .NOTIFICATION_LIST, // تأكدي من تعريفه داخل ملف app_routes.dart
+      page: () => const NotificationListScreen(),
+      transition: Transition.cupertino,
+    ),
+
+    // 🌟 خطوتنا الجديدة: صفحة تفاصيل الإشعار
+    GetPage(
+      name: AppRoutes
+          .NOTIFICATION_DETAILS, // تأكدي من تعريفه داخل ملف app_routes.dart
+      page: () => NotificationDetailsScreen(), // بدون const كرمال الـ arguments
+      transition: Transition.cupertino,
     ),
     GetPage(
       name: AppRoutes.SEARCH, // تأكدي أن هذا المسار معرف في AppRoutes

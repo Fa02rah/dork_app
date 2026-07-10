@@ -98,6 +98,7 @@ class CategoryDetailsView extends GetView<CategoryDetailsController> {
                             title: item['name'] ?? '',
                             subtitle: item['desc'] ?? '',
                             imagePath: item['image'] ?? '',
+                            rating: (item['rating'] as num?)?.toDouble() ?? 0.0,
                             onTap: () {
                               Get.toNamed(AppRoutes.PROVIDER_DETAILS, arguments: item);
                             },

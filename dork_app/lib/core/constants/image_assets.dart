@@ -14,18 +14,21 @@ class ImageAssets {
 
   // 4. أيقونات الأصناف (Categories)
   // تأكد من وجود هذه الملفات في مجلد assets/images بنفس الأسماء
-  static const String bank    = '$_basePath/bank.png';
-  static const String gov     = '$_basePath/gov.png';
-  static const String clinic  = '$_basePath/clinic.png';
-  static const String edu     = '$_basePath/edu.png';
-  static const String food    = '$_basePath/food.png';
-  static const String fun     = '$_basePath/fun.png';
+  static const String bank = '$_basePath/bank.png';
+  static const String logo = '$_basePath/dork_logo.png';
+  static const String gov = '$_basePath/gov.png';
+  static const String clinic = '$_basePath/clinic.png';
+  static const String edu = '$_basePath/edu.png';
+  static const String food = '$_basePath/food.png';
+  static const String fun = '$_basePath/fun.png';
 
   // 5. أيقونات الخدمات الأكثر تقييماً (Top Rated)
-  static const String bankLogo   = '$_basePath/bank.png';
+  static const String bankLogo = '$_basePath/bank.png';
   static const String clinicLogo = '$_basePath/clinic.png';
 
   // 6. صور الحالات (States)
-  static const String noData  = '$_basePath/no_data.png'; // تظهر عند فراغ القائمة
-  static const String offline = '$_basePath/offline.png'; // تظهر عند انقطاع الانترنت
+  static const String noData =
+      '$_basePath/no_data.png'; // تظهر عند فراغ القائمة
+  static const String offline =
+      '$_basePath/offline.png'; // تظهر عند انقطاع الانترنت
 }

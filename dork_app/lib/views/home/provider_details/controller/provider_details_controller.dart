@@ -7,11 +7,12 @@ class ProviderDetailsController extends GetxController {
   var providerLogoPath = ''.obs; // اللوجو العلوي يبقى كما هو (ديناميكي)
   var services = <ServiceModel>[].obs;
   var isLoading = true.obs;
+  var currentRating = 0.0.obs;
 
   @override
   void onInit() {
     super.onInit();
-
+    currentRating.value = (Get.arguments['rating'] as num?)?.toDouble() ?? 0.0;
     // 1. استلام الاسم
     providerName.value = Get.arguments['name'] ?? 'تفاصيل الخدمة';
 
@@ -25,6 +26,19 @@ class ProviderDetailsController extends GetxController {
     }
 
     fetchServices(Get.arguments['id'] ?? 0);
+  }
+  void submitRating(double newRating) {
+    currentRating.value = newRating;
+
+    // هنا مكان الربط مع الـ API في المستقبل
+    print("تم إرسال التقييم الجديد: $newRating للمؤسسة");
+
+    // إشعار للمستخدم
+    Get.snackbar(
+      "شكراً لك!",
+      "تم تحديث التقييم إلى $newRating نجوم",
+      snackPosition: SnackPosition.BOTTOM,
+    );
   }
 
   void fetchServices(int providerId) async {

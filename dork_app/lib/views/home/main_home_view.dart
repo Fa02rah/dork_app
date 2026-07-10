@@ -1,10 +1,10 @@
+import 'package:dork_app/views/home/widgets/top_rated_institution.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'controller/home_controller.dart';
 import 'widgets/home_header.dart';
 import 'widgets/search_bar_widget.dart';
 import 'widgets/categories_grid.dart';
-import 'widgets/top_rated_services.dart';
 import '../../../core/constants/color_manager.dart';
 
 class MainHomeView extends StatelessWidget {
@@ -21,10 +21,15 @@ class MainHomeView extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            ColorManager.accent.withOpacity(0.06), // مسحة برتقالية خفيفة جداً في الأعلى
+            ColorManager.accent.withOpacity(
+              0.06,
+            ), // مسحة برتقالية خفيفة جداً في الأعلى
             ColorManager.background, // العودة للون الخلفية الرسمي للتطبيق
           ],
-          stops: const [0.0, 0.25], // التدرج ينتهي عند أول 25% من الشاشة ليبقى التصميم نظيفاً
+          stops: const [
+            0.0,
+            0.25,
+          ], // التدرج ينتهي عند أول 25% من الشاشة ليبقى التصميم نظيفاً
         ),
       ),
       child: RefreshIndicator(
@@ -32,7 +37,7 @@ class MainHomeView extends StatelessWidget {
         onRefresh: () async => await controller.refreshData(),
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(
-              parent: BouncingScrollPhysics()
+            parent: BouncingScrollPhysics(),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 20),
           children: [
@@ -55,7 +60,8 @@ class MainHomeView extends StatelessWidget {
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Cairo',
-                color: ColorManager.primary, // الأزرق الداكن من ملف الألوان الخاص بكِ
+                color: ColorManager
+                    .primary, // الأزرق الداكن من ملف الألوان الخاص بكِ
               ),
             ),
 
@@ -65,7 +71,7 @@ class MainHomeView extends StatelessWidget {
             const SizedBox(height: 35),
 
             // 4. الخدمات الأكثر تقييماً
-            const TopRatedServices(),
+            const TopRatedInstitution(),
 
             // مسافة أمان لضمان ظهور المحتوى كاملاً فوق الزر العائم
             const SizedBox(height: 140),
